@@ -1,7 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+// import { firebase, firestore } from './utils/firebase';
+import { Constants } from 'expo';
 
 export default class App extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      user_logged_in: false
+    };
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -10,8 +20,8 @@ export default class App extends React.Component {
         <Text>Shake your phone to open the developer menu.</Text>
       </View>
     );
-  }
-}
+  };
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -19,5 +29,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
+    marginTop: Constants.statusBarHeight
+  }
 });
+ 
