@@ -13,12 +13,22 @@ export default class App extends React.Component {
   };
 
   render() {
+    if (!this.state.user_logged_in) {
+      return (
+        !this.state.user_logged_in &&
+          <View style={styles.container}>
+            <Text>login!</Text>
+          </View>
+      )
+    }
+    
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
+      this.state.user_logged_in &&
+        <View style={styles.container}>
+          <Text>Open up App.js to start working on your app!</Text>
+          <Text>Changes you make will automatically reload.</Text>
+          <Text>Shake your phone to open the developer menu.</Text>
+        </View>
     );
   };
 };
