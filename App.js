@@ -32,7 +32,7 @@ export default class App extends React.Component {
     if (!user) {
       if (this.state.loginOrSignup === "login") {
         return (
-          <View>
+          <View style={styles.loginSignupPage}>
             <LoginPage />
             <Button title="Don't have an account? Sign up here" onPress={() => { this.setState( {loginOrSignup: "signup"} ) }} />
           </View>
@@ -40,7 +40,7 @@ export default class App extends React.Component {
       }
 
       return (
-        <View>
+        <View style={styles.loginSignupPage}>
           <SignupPage />
           <Button title="Already have an account? Log in here" onPress={() => { this.setState( {loginOrSignup: "login"} ) }} />
         </View>
@@ -83,6 +83,11 @@ export default class App extends React.Component {
 };
 
 const styles = StyleSheet.create({
+  loginSignupPage: {
+    flex: 1,
+    flexGrow: 1
+  },
+
   mainPage: {
     flex: 1,
     marginTop: Constants.statusBarHeight

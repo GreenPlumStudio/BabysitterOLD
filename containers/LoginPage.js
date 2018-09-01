@@ -12,13 +12,9 @@ export default class LoginPage extends Component {
             password: "",
             errMsg: ""
         };
-
-        this.tryLogin = this.tryLogin.bind(this);
     };
 
     tryLogin() {
-        console.log(this.state.emailAddress + " " + this.state.password);
-
         firebase.auth().signInWithEmailAndPassword(this.state.emailAddress, this.state.password)
             .catch(err => {
                 this.setState({errMsg: err.message})
@@ -35,12 +31,14 @@ export default class LoginPage extends Component {
                 <Text>please dont do cocaine ey cocaine ruin your brain ey</Text>
 
                 <Text style={styles.inputLabel}>Email Address</Text>
-                <TextInput textContentType="emailAddress" value={this.state.emailAddress} onChange={() => {this.handleInputChange("emailAddress", event.target.value)}} />
+                <TextInput textContentType="emailAddress" value={this.state.emailAddress} onChange={event => {this.handleInputChange("emailAddress", event.target.value)}} />
 
                 <Text style={styles.inputLabel}>Password</Text>
-                <TextInput textContentType="password" secureTextEntry={true} value={this.state.password} onChange={() => {this.handleInputChange("password", event.target.value)}} />
+                <TextInput textContentType="password" secureTextEntry={true} value={this.state.password} onChange={event => {this.handleInputChange("password", event.target.value)}} />
 
-                <Button title="Log In" onPress={this.tryLogin} />
+                <Text style={styles.errMsg}>{this.state.errMsg}</Text>
+
+                <Button title="Log In" onPress={this.tryLogin.bind(this)} />
             </View>
         );
     };
@@ -50,11 +48,18 @@ const styles = StyleSheet.create({
     loginPage: {
         flex: 1,
         justifyContent: "space-around",
-        alignItems: "stretch",
-        marginTop: Constants.statusBarHeight
+        alignItems: "baseline",
+        marginTop: Constants.statusBarHeight,
+        backgroundColor: "lightblue"
     },
 
     inputLabel: {
-        
+        fontSize: 20,
+        color: "gray"
+    },
+
+    errMsg: {
+        fontSize: 15,
+        color: "red"
     }
 });
