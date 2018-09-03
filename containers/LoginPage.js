@@ -1,5 +1,5 @@
 import React, {Component} from 'React';
-import { StyleSheet, Text, View, Button, TextInput, Dimensions,  } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { firebase } from '../utils/firebase';
 import { Constants } from 'expo';
 
@@ -23,19 +23,24 @@ export default class LoginPage extends Component {
 
     render() {
         return (
-            <View style={styles.loginPage}>
+            <KeyboardAvoidingView style={styles.loginPage} behavior="padding" enabled>
                 <Text style={styles.logo}>Babysitter</Text>
+                
+                <Text style={styles.formTitle}>Log In</Text>
+                <View>
+                    <Text style={styles.inputLabel}>Email Address</Text>
+                    <TextInput style={styles.formInput} textContentType="emailAddress" value={this.state.emailAddress} onChangeText={text => this.setState({emailAddress: text})} multiline />
+                </View>
 
-                <Text style={styles.inputLabel}>Email Address</Text>
-                <TextInput style={styles.formInput} textContentType="emailAddress" value={this.state.emailAddress} onChangeText={text => this.setState({emailAddress: text})} />
-
-                <Text style={styles.inputLabel}>Password</Text>
-                <TextInput style={styles.formInput} textContentType="password" secureTextEntry={true} value={this.state.password} onChangeText={text => this.setState({password: text})} />
+                <View>
+                    <Text style={styles.inputLabel}>Password</Text>
+                    <TextInput style={styles.formInput} textContentType="password" secureTextEntry={true} value={this.state.password} onChangeText={text => this.setState({password: text})} multiline />
+                </View>
 
                 <Text style={styles.errMsg}>{this.state.errMsg}</Text>
 
                 <Button title="Log In" onPress={this.tryLogin.bind(this)} />
-            </View>
+            </KeyboardAvoidingView>
         );
     };
 };
@@ -43,8 +48,8 @@ export default class LoginPage extends Component {
 const styles = StyleSheet.create({
     logo: {
         marginTop: 30,
-        marginBottom: 30,
-        fontSize: 70,
+        marginBottom: 5,
+        fontSize: 50,
         fontWeight: "700",
         color: "cornflowerblue"
     },
@@ -57,6 +62,13 @@ const styles = StyleSheet.create({
         backgroundColor: "lightblue"
     },
 
+    formTitle: {
+        fontSize: 30,
+        fontWeight: "500",
+        color: "dodgerblue",
+        marginBottom: 15
+    },
+
     inputLabel: {
         fontSize: 20,
         color: "darkcyan",
@@ -67,13 +79,13 @@ const styles = StyleSheet.create({
     },
 
     formInput: {
-        width: 0.7 * Dimensions.get("window").width,
-        maxHeight: 30
+        width: 0.7 * Dimensions.get("window"),
+        fontSize: 17
     },
 
     errMsg: {
         fontSize: 15,
         color: "red",
-        maxHeight: 30
+        textAlign: "center"
     }
 });

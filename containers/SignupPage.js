@@ -1,5 +1,5 @@
 import React, {Component} from 'React';
-import { StyleSheet, Text, View, Button, TextInput, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, Dimensions, ScrollView } from 'react-native';
 import { firebase, firestore } from '../utils/firebase';
 import { Constants } from 'expo';
 
@@ -21,11 +21,11 @@ export default class LoginPage extends Component {
     };
 
     trySignup() {
-        if (this.state.password !== this.state.confirmPassword) {
-            this.setState({errMsg: ("Passwords do not match")});
-            return;
-        } else if (this.state.firstName === "" || this.state.lastName === "" || this.state.username === "" || this.state.emailAddress === "" || this.state.password === "" || this.state.confirmPassword === "") {
+        if (this.state.firstName === "" || this.state.lastName === "" || this.state.username === "" || this.state.emailAddress === "" || this.state.password === "" || this.state.confirmPassword === "") {
             this.setState({errMsg: "Please fill out all fields"});
+            return;
+        } else if (this.state.password !== this.state.confirmPassword) {
+            this.setState({errMsg: ("Passwords do not match")});
             return;
         }
 
@@ -48,23 +48,40 @@ export default class LoginPage extends Component {
             <View style={styles.signupPage}>
                 <Text style={styles.logo}>Babysitter</Text>
 
-                <Text style={styles.inputLabel}>First Name</Text>
-                <TextInput style={styles.formInput} textContentType="givenName" value={this.state.firstName} onChangeText={text => this.setState({firstName: text})} />
+                <Text style={styles.formTitle}>Sign Up</Text>
+                <ScrollView contentContainerStyle={styles.signupForm}>
+                    <View>
+                        <View>
+                            <Text style={styles.inputLabel}>First Name</Text>
+                            <TextInput style={styles.formInput} textContentType="givenName" value={this.state.firstName} onChangeText={text => this.setState({firstName: text})} />
+                        </View>
 
-                <Text style={styles.inputLabel}>Last Name</Text>
-                <TextInput style={styles.formInput} textContentType="familyName" value={this.state.lastName} onChangeText={text => this.setState({lastName: text})} />
+                        <View>
+                            <Text style={styles.inputLabel}>Last Name</Text>
+                            <TextInput style={styles.formInput} textContentType="familyName" value={this.state.lastName} onChangeText={text => this.setState({lastName: text})} />
+                        </View>
+                        
+                        <View>
+                            <Text style={styles.inputLabel}>Username</Text>
+                            <TextInput style={styles.formInput} textContentType="username" value={this.state.username} onChangeText={text => this.setState({username: text})} />
+                        </View>
 
-                <Text style={styles.inputLabel}>Username</Text>
-                <TextInput style={styles.formInput} textContentType="username" value={this.state.username} onChangeText={text => this.setState({username: text})} />
+                        <View>
+                            <Text style={styles.inputLabel}>Email Address</Text>
+                            <TextInput style={styles.formInput} textContentType="emailAddress" value={this.state.emailAddress} onChangeText={text => this.setState({emailAddress: text})} />
+                        </View>
 
-                <Text style={styles.inputLabel}>Email Address</Text>
-                <TextInput style={styles.formInput} textContentType="emailAddress" value={this.state.emailAddress} onChangeText={text => this.setState({emailAddress: text})} />
+                        <View>
+                            <Text style={styles.inputLabel}>Password</Text>
+                            <TextInput style={styles.formInput} textContentType="password" secureTextEntry={true} value={this.state.password} onChangeText={text => this.setState({password: text})} />
+                        </View>
 
-                <Text style={styles.inputLabel}>Password</Text>
-                <TextInput style={styles.formInput} textContentType="password" secureTextEntry={true} value={this.state.password} onChangeText={text => this.setState({password: text})} />
-
-                <Text style={styles.inputLabel}>Confirm Password</Text>
-                <TextInput style={styles.formInput} textContentType="password" secureTextEntry={true} value={this.state.confirmPassword} onChangeText={text => this.setState({confirmPassword: text})} />
+                        <View>
+                            <Text style={styles.inputLabel}>Confirm Password</Text>
+                            <TextInput style={styles.formInput} textContentType="password" secureTextEntry={true} value={this.state.confirmPassword} onChangeText={text => this.setState({confirmPassword: text})} />
+                        </View>
+                    </View>
+                </ScrollView>
 
                 <Text style={styles.errMsg}>{this.state.errMsg}</Text>
 
@@ -77,8 +94,8 @@ export default class LoginPage extends Component {
 const styles = StyleSheet.create({
     logo: {
         marginTop: 30,
-        marginBottom: 30,
-        fontSize: 70,
+        marginBottom: 5,
+        fontSize: 50,
         fontWeight: "700",
         color: "cornflowerblue"
     },
@@ -89,6 +106,19 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: Constants.statusBarHeight,
         backgroundColor: "lightblue"
+    },
+
+    signupForm: {
+        flex: 1,
+        justifyContent: "space-between",
+        alignItems: "center"
+    },
+
+    formTitle: {
+        fontSize: 30,
+        fontWeight: "500",
+        color: "dodgerblue",
+        marginBottom: 15
     },
 
     inputLabel: {
@@ -102,12 +132,12 @@ const styles = StyleSheet.create({
 
     formInput: {
         width: 0.7 * Dimensions.get("window").width,
-        maxHeight: 30
+        fontSize: 17
     },
 
     errMsg: {
         fontSize: 15,
         color: "red",
-        maxHeight: 30
+        textAlign: "center"
     }
 });
