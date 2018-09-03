@@ -21,14 +21,10 @@ export default class LoginPage extends Component {
     };
 
     trySignup() {
-        let emailAddress, password, confirmPassword = this.state;
-
         if (this.state.password !== this.state.confirmPassword) {
-            this.setState({errMsg: ("Passwords do not Match")});
-            
-
+            this.setState({errMsg: ("Passwords do not match")});
             return;
-        } else if (this.state.firstName === "" || this.state.lastName === "" || this.state.username === "" || emailAddress === "" || password === "" || this.state.confirmPassword === "") {
+        } else if (this.state.firstName === "" || this.state.lastName === "" || this.state.username === "" || this.state.emailAddress === "" || this.state.password === "" || this.state.confirmPassword === "") {
             this.setState({errMsg: "Please fill out all fields"});
             return;
         }
