@@ -26,6 +26,14 @@ export default class App extends React.Component {
     });
   };
 
+  signOut() {
+    firebase.auth().signOut().then(() => {
+      this.setState({user: undefined});
+    }).catch(() => {
+      alert("Sign out failed, please try again");
+    });
+  };
+
   render() {
     let user = this.state.user;
 
@@ -49,8 +57,9 @@ export default class App extends React.Component {
     
     return (
       <View style={styles.mainPage}>
-        <View style={{height: 50}}>
+        <View style={{height: 70}}>
           <Text>this is the main page</Text>
+          <Button title="Sign Out" onPress={this.signOut.bind(this)} />
         </View>
         <View style={styles.navBar}>
           <View style={styles.navButton}>
