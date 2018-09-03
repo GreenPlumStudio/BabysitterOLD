@@ -23,15 +23,17 @@ export default class LoginPage extends Component {
     trySignup() {
         let emailAddress, password, confirmPassword = this.state;
 
-        if (password !== confirmPassword) {
-            this.setState({errMsg: "Passwords do not match"});
+        if (this.state.password !== this.state.confirmPassword) {
+            this.setState({errMsg: ("Passwords do not Match")});
+            
+
             return;
         } else if (this.state.firstName === "" || this.state.lastName === "" || this.state.username === "" || emailAddress === "" || password === "" || this.state.confirmPassword === "") {
             this.setState({errMsg: "Please fill out all fields"});
             return;
         }
 
-        firebase.auth().createUserWithEmailAndPassword(emailAddress, password)
+        firebase.auth().createUserWithEmailAndPassword(this.state.emailAddress, this.state.password)
             .then(() => {
                 firestore.collection("users").doc(firebase.auth().currentUser.uid).set({
                     firstName: this.state.firstName,
@@ -40,6 +42,7 @@ export default class LoginPage extends Component {
                 });
             })
             .catch(err => {
+                console.log(this.state.emailAddress);
                 this.setState({errMsg: err.message});
             });
     };
