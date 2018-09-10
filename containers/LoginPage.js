@@ -1,17 +1,22 @@
 import React, {Component} from 'React';
-import { StyleSheet, Text, View, Button, TextInput, Dimensions, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Dimensions, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import { firebase } from '../utils/firebase';
 import { Constants } from 'expo';
 
 export default class LoginPage extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
+            accountType: props.accountType,
+            formTitleSize: 30,
             emailAddress: "",
             password: "",
             errMsg: ""
         };
+
+        this.onFormFocus = this.onFormFocus.bind(this);
+        this.onFormEndEditing = this.onFormEndEditing.bind(this);
     };
 
     tryLogin() {
@@ -21,71 +26,84 @@ export default class LoginPage extends Component {
             });
     };
 
+    onFormFocus() {
+        this.setState({formTitleSize: 15});
+    };
+
+    onFormEndEditing() {
+        this.setState({formTitleSize: 30});
+    };
+
     render() {
+        let formTitle = {
+            fontSize: this.state.formTitleSize,
+            fontWeight: "500",
+            color: "dodgerblue",
+            marginTop: 10,
+            elevation: 2
+        };
+
         return (
             <KeyboardAvoidingView style={styles.loginPage} behavior="padding" enabled>
-                <Text style={styles.logo}>Babysitter</Text>
-                
-                <Text style={styles.formTitle}>Log In</Text>
-                <View>
-                    <Text style={styles.inputLabel}>Email Address</Text>
-                    <TextInput style={styles.formInput} textContentType="emailAddress" value={this.state.emailAddress} onChangeText={text => this.setState({emailAddress: text})} multiline />
-                </View>
+                <Text style={formTitle}>{(this.state.accountType === "parent" ? "Parent" : "Babysitter") + " Log In"}</Text>
 
-                <View>
-                    <Text style={styles.inputLabel}>Password</Text>
-                    <TextInput style={styles.formInput} textContentType="password" secureTextEntry={true} value={this.state.password} onChangeText={text => this.setState({password: text})} multiline />
+                <View style={styles.loginForm}>
+                    <TextInput style={styles.formInput} underlineColorAndroid="transparent" placeholder="Email" textContentType="emailAddress" keyboardType="email-address" value={this.state.emailAddress} onChangeText={text => this.setState({emailAddress: text})} onFocus={this.onFormFocus} onEndEditing={this.onFormEndEditing} />
+                    
+                    <TextInput style={styles.formInput} underlineColorAndroid="transparent" placeholder="Password" textContentType="password" secureTextEntry={true} value={this.state.password} onChangeText={text => this.setState({password: text})} onFocus={this.onFormFocus} onEndEditing={this.onFormEndEditing} />
                 </View>
 
                 <Text style={styles.errMsg}>{this.state.errMsg}</Text>
 
-                <Button title="Log In" onPress={this.tryLogin.bind(this)} />
+                <TouchableOpacity style={styles.loginButton} onPress={this.tryLogin.bind(this)}>
+                    <Text style={styles.loginButtonText}>LOG IN</Text>
+                </TouchableOpacity>
+
+                <View style={{maxHeight: 50}} />
             </KeyboardAvoidingView>
         );
     };
 };
 
 const styles = StyleSheet.create({
-    logo: {
-        marginTop: 30,
-        marginBottom: 5,
-        fontSize: 50,
-        fontWeight: "700",
-        color: "cornflowerblue"
-    },
-
     loginPage: {
         flex: 1,
         justifyContent: "space-around",
         alignItems: "center",
-        marginTop: Constants.statusBarHeight,
         backgroundColor: "lightblue"
     },
 
-    formTitle: {
-        fontSize: 30,
-        fontWeight: "500",
-        color: "dodgerblue",
-        marginBottom: 15
-    },
-
-    inputLabel: {
-        fontSize: 20,
-        color: "darkcyan",
-        fontWeight: "500",
-        width: 0.7 * Dimensions.get("window").width,
-        textAlign: "left",
-        maxHeight: 30
+    loginForm: {
+        flex: 1,
+        justifyContent: "space-between",
+        maxHeight: 150
     },
 
     formInput: {
-        width: 0.7 * Dimensions.get("window"),
-        fontSize: 17
+        backgroundColor: "white",
+        width: 0.85 * Dimensions.get("window").width,
+        padding: 20,
+        fontSize: 20,
+        borderRadius: 2,
+        elevation: 2
     },
 
     errMsg: {
         fontSize: 15,
         color: "red",
         textAlign: "center"
+    },
+
+    loginButton: {
+        backgroundColor: "#2196F3",
+        borderRadius: 2,
+        elevation: 4
+    },
+
+    loginButtonText: {
+        color: "white",
+        fontSize: 15,
+        fontWeight: "500",
+        padding: 8
     }
 });

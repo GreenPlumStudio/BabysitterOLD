@@ -1,13 +1,14 @@
 import React, {Component} from 'React';
-import { StyleSheet, Text, View, Button, TextInput, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { firebase, firestore } from '../utils/firebase';
 import { Constants } from 'expo';
 
 export default class LoginPage extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
+            accountType: props.accountType,
             firstName: "",
             lastName: "",
             username: "",
@@ -17,7 +18,7 @@ export default class LoginPage extends Component {
             errMsg: ""
         };
 
-        this.trySignup = this.trySignup.bind(this);
+        this.onFormFocus = this.onFormFocus.bind(this);
     };
 
     trySignup() {
@@ -43,75 +44,46 @@ export default class LoginPage extends Component {
             });
     };
 
+    onFormFocus() {
+        
+    };
+
     render() {
         return (
-            <View style={styles.signupPage}>
-                <Text style={styles.logo}>Babysitter</Text>
+            <View style={{flex: 1}}>
+            <KeyboardAvoidingView style={styles.signupPage} behavior="padding" enabled>
+                <Text style={styles.formTitle}>{(this.state.accountType === "parent" ? "Parent" : "Babysitter") + " Sign Up"}</Text>
 
-                <Text style={styles.formTitle}>Sign Up</Text>
-                <ScrollView contentContainerStyle={styles.signupForm}>
-                    <View>
-                        <View>
-                            <Text style={styles.inputLabel}>First Name</Text>
-                            <TextInput style={styles.formInput} textContentType="givenName" value={this.state.firstName} onChangeText={text => this.setState({firstName: text})} />
-                        </View>
+                <View style={styles.signupForm}>
+                    <TextInput style={styles.formInput} underlineColorAndroid="transparent" placeholder="First Name" textContentType="givenName" value={this.state.firstName} onChangeText={text => this.setState({firstName: text})} onFocus={this.onFormFocus} />
 
-                        <View>
-                            <Text style={styles.inputLabel}>Last Name</Text>
-                            <TextInput style={styles.formInput} textContentType="familyName" value={this.state.lastName} onChangeText={text => this.setState({lastName: text})} />
-                        </View>
-                        
-                        <View>
-                            <Text style={styles.inputLabel}>Username</Text>
-                            <TextInput style={styles.formInput} textContentType="username" value={this.state.username} onChangeText={text => this.setState({username: text})} />
-                        </View>
-
-                        <View>
-                            <Text style={styles.inputLabel}>Email Address</Text>
-                            <TextInput style={styles.formInput} textContentType="emailAddress" value={this.state.emailAddress} onChangeText={text => this.setState({emailAddress: text})} />
-                        </View>
-
-                        <View>
-                            <Text style={styles.inputLabel}>Password</Text>
-                            <TextInput style={styles.formInput} textContentType="password" secureTextEntry={true} value={this.state.password} onChangeText={text => this.setState({password: text})} />
-                        </View>
-
-                        <View>
-                            <Text style={styles.inputLabel}>Confirm Password</Text>
-                            <TextInput style={styles.formInput} textContentType="password" secureTextEntry={true} value={this.state.confirmPassword} onChangeText={text => this.setState({confirmPassword: text})} />
-                        </View>
-                    </View>
-                </ScrollView>
+                    <TextInput style={styles.formInput} underlineColorAndroid="transparent" placeholder="Last Name" textContentType="familyName" value={this.state.lastName} onChangeText={text => this.setState({lastName: text})} onFocus={this.onFormFocus} />
+                    
+                    <TextInput style={styles.formInput} underlineColorAndroid="transparent" placeholder="Username" textContentType="username" value={this.state.username} onChangeText={text => this.setState({username: text})} onFocus={this.onFormFocus} />
+                    
+                    <TextInput style={styles.formInput} underlineColorAndroid="transparent" placeholder="Email" textContentType="emailAddress" keyboardType="email-address" value={this.state.emailAddress} onChangeText={text => this.setState({emailAddress: text})} onFocus={this.onFormFocus} />
+                    
+                    <TextInput style={styles.formInput} underlineColorAndroid="transparent" placeholder="Password" textContentType="password" secureTextEntry={true} value={this.state.password} onChangeText={text => this.setState({password: text})} onFocus={this.onFormFocus} />
+                    
+                    <TextInput style={styles.formInput} underlineColorAndroid="transparent" placeholder="Confirm Password" textContentType="password" secureTextEntry={true} value={this.state.confirmPassword} onChangeText={text => this.setState({confirmPassword: text})} onFocus={this.onFormFocus} />
+                </View>
 
                 <Text style={styles.errMsg}>{this.state.errMsg}</Text>
 
-                <Button title="Sign Up" onPress={this.trySignup} />
+                <Button title="Sign Up" onPress={this.trySignup.bind(this)} />
+            </KeyboardAvoidingView>
+            <View style={{height: 30}} />
             </View>
         );
     };
 };
 
 const styles = StyleSheet.create({
-    logo: {
-        marginTop: 30,
-        marginBottom: 5,
-        fontSize: 50,
-        fontWeight: "700",
-        color: "cornflowerblue"
-    },
-
     signupPage: {
         flex: 1,
         justifyContent: "space-around",
         alignItems: "center",
-        marginTop: Constants.statusBarHeight,
         backgroundColor: "lightblue"
-    },
-
-    signupForm: {
-        flex: 1,
-        justifyContent: "space-between",
-        alignItems: "center"
     },
 
     formTitle: {
@@ -121,18 +93,17 @@ const styles = StyleSheet.create({
         marginBottom: 15
     },
 
-    inputLabel: {
-        fontSize: 20,
-        color: "darkcyan",
-        fontWeight: "500",
-        width: 0.7 * Dimensions.get("window").width,
-        textAlign: "left",
-        maxHeight: 30
+    signupForm: {
+        flex: 1,
+        justifyContent: "space-between"
     },
 
     formInput: {
-        width: 0.7 * Dimensions.get("window").width,
-        fontSize: 17
+        backgroundColor: "white",
+        width: 0.85 * Dimensions.get("window").width,
+        padding: 20,
+        fontSize: 20,
+        borderRadius: 2
     },
 
     errMsg: {
