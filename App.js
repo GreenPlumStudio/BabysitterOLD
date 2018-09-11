@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Dimensions, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput,TouchableOpacity } from 'react-native';
 import { firebase, firestore } from './utils/firebase';
 import { Constants } from 'expo';
 
@@ -15,11 +15,16 @@ export default class App extends React.Component {
 
     this.state = {
       user: undefined,
+      accountType: "",
       loginOrSignup: "login",
       currentPage: "Reminders",
       babysitterEmail: ""
     };
 
+    this.backToChooseAccountType = this.backToChooseAccountType.bind(this);
+  };
+
+  componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.setState({user});
@@ -29,12 +34,13 @@ export default class App extends React.Component {
 
   signOut() {
     firebase.auth().signOut().then(() => {
-      this.setState({user: undefined});
+      this.setState({user: undefined, accountType: "", loginOrSignup: "login"});
     }).catch(() => {
       alert("Sign out failed, please try again");
     });
   };
 
+<<<<<<< HEAD
   addBabysitter() {
     firebase.auth().fetchProvidersForEmail(this.state.babysitterEmail)
     .then(providers => {
@@ -53,15 +59,46 @@ export default class App extends React.Component {
     });
     
   }
+=======
+  backToChooseAccountType() {
+    this.setState({errMsg: "back to choose", accountType: ""})
+  };
+>>>>>>> b582005175c9326ed19509f54de1170917cb3008
 
   render() {
     let user = this.state.user;
 
     if (!user) {
+      if (this.state.accountType === "") {
+        return (
+          <View style={styles.welcomePage}>
+            <Text style={styles.logo}>Babysitter</Text>
+
+            <View style={{alignItems: "center", marginTop: 50}}>
+              <Text style={{fontSize: 20, fontWeight: "300"}}>I am a...</Text>
+
+              <View style={{flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center", maxHeight: 100}}>
+                <TouchableOpacity style={{marginRight: 10, backgroundColor: "#2196F3", borderRadius: 2, elevation: 4}} onPress={() => { this.setState( {accountType: "parent"} ) }}>
+                  <Text style={{color: "white", fontSize: 15, fontWeight: "500", padding: 8}}>Parent</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{marginLeft: 10, backgroundColor: "#2196F3", borderRadius: 2, elevation: 4}} onPress={() => { this.setState( {accountType: "babysitter"} ) }}>
+                  <Text style={{color: "white", fontSize: 15, fontWeight: "500", padding: 8}}>Babysitter</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        );
+      }
+
       if (this.state.loginOrSignup === "login") {
         return (
           <View style={styles.loginSignupPage}>
-            <LoginPage />
+            <TouchableOpacity style={styles.backButton} onPress={this.backToChooseAccountType}>
+              <Text style={styles.backButtonText}>←</Text>
+            </TouchableOpacity>
+
+            <LoginPage accountType={this.state.accountType} />
+            
             <Button title="Don't have an account? Sign up here" onPress={() => { this.setState( {loginOrSignup: "signup"} ) }} />
           </View>
         );
@@ -69,7 +106,12 @@ export default class App extends React.Component {
 
       return (
         <View style={styles.loginSignupPage}>
-          <SignupPage />
+          <TouchableOpacity style={styles.backButton} onPress={this.backToChooseAccountType}>
+            <Text style={styles.backButtonText}>←</Text>
+          </TouchableOpacity>
+
+          <SignupPage accountType={this.state.accountType} />
+          
           <Button title="Already have an account? Log in here" onPress={() => { this.setState( {loginOrSignup: "login"} ) }} />
         </View>
       );
@@ -120,9 +162,41 @@ export default class App extends React.Component {
 };
 
 const styles = StyleSheet.create({
+  welcomePage: {
+    marginTop: Constants.statusBarHeight,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "lightblue"
+  },
+  
+  logo: {
+    marginBottom: 50,
+    fontSize: 50,
+    fontWeight: "700",
+    color: "cornflowerblue",
+    elevation: 2
+  },
+
   loginSignupPage: {
     flex: 1,
-    flexGrow: 1
+    flexGrow: 1,
+    marginTop: Constants.statusBarHeight
+  },
+
+  backButton: {
+    position: "absolute",
+    top: 20,
+    left: 20,
+    elevation: 4,
+    zIndex: 1
+  },
+
+  backButtonText: {
+    color: "gray",
+    fontSize: 20,
+    fontWeight: "500",
+    padding: 8
   },
 
   mainPage: {
