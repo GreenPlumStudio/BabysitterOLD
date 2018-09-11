@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Dimensions } from 'react-native';
-import { firebase } from './utils/firebase';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput } from 'react-native';
+import { firebase, firestore } from './utils/firebase';
 import { Constants } from 'expo';
 
 import LoginPage from './containers/LoginPage';
@@ -16,7 +16,8 @@ export default class App extends React.Component {
     this.state = {
       user: undefined,
       loginOrSignup: "login",
-      currentPage: "Messages"
+      currentPage: "Reminders",
+      babysitterEmail: ""
     };
 
     firebase.auth().onAuthStateChanged(user => {
@@ -33,6 +34,25 @@ export default class App extends React.Component {
       alert("Sign out failed, please try again");
     });
   };
+
+  addBabysitter() {
+    firebase.auth().fetchProvidersForEmail(this.state.babysitterEmail)
+    .then(providers => {
+      if (providers.length === 0) {
+        console.log("hah u got trolled")
+      } else {
+        providers
+        firestore.collection("parentUsers").doc(firebase.auth().currentUser.uid/babySitters).update({
+          providers: {
+            "messages": {},
+            "reminders": {},
+            "babyInfo": {}
+          }
+      });
+      }
+    });
+    
+  }
 
   render() {
     let user = this.state.user;
@@ -56,22 +76,20 @@ export default class App extends React.Component {
     }
     
     return (
-      <View style={styles.mainPage}>
-        <View style={{height: 70}}>
-          <Text>this is the main page</Text>
-          <Button title="Sign Out" onPress={this.signOut.bind(this)} />
-        </View>
-        <View style={styles.navBar}>
-          <View style={styles.navButton}>
-            <Text style={styles.navButtonLabel}>MESSAGES</Text>
+      <View >
+
+        <View >
+          <View >
+            <Text>MESSAGES</Text>
           </View>
-          <View style={styles.navButton}>
-            <Text style={styles.navButtonLabel}>REMINDERS</Text>
+          <View >
+            <Text >REMINDERS</Text>
           </View>
-          <View style={styles.navButton}>
-            <Text style={styles.navButtonLabel}>ROUTINE</Text>
+          <View >
+            <Text >ROUTINE</Text>
           </View>
         </View>
+
         <View>
           {
             this.state.currentPage === "Messages" &&
@@ -86,6 +104,16 @@ export default class App extends React.Component {
               <Routine user={user} />
           }
         </View>
+
+        <View style={{height: 70}}>
+          <Text>this is the main page</Text>
+          <Button title="Sign Out" onPress={this.signOut.bind(this)} />
+          
+          <Text>add BabySitter Email</Text>
+          <TextInput value={this.state.babysitterEmail} onChangeText={text => this.setState({babysitterEmail: text})}/>
+          <Button title="Add Babysitter" onPress={this.addBabysitter()} />
+        </View>
+        
       </View>
     );
   };

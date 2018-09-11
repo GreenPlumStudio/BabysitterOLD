@@ -31,7 +31,7 @@ export default class LoginPage extends Component {
 
         firebase.auth().createUserWithEmailAndPassword(this.state.emailAddress, this.state.password)
             .then(() => {
-                firestore.collection("users").doc(firebase.auth().currentUser.uid).set({
+                firestore.collection("parentUsers").doc(firebase.auth().currentUser.uid).set({
                     firstName: this.state.firstName,
                     lastName: this.state.lastName,
                     username: this.state.username
