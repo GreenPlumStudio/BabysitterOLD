@@ -40,7 +40,6 @@ export default class App extends React.Component {
     });
   };
 
-<<<<<<< HEAD
   addBabysitter() {
     firebase.auth().fetchProvidersForEmail(this.state.babysitterEmail)
     .then(providers => {
@@ -59,11 +58,10 @@ export default class App extends React.Component {
     });
     
   }
-=======
+  
   backToChooseAccountType() {
     this.setState({errMsg: "back to choose", accountType: ""})
   };
->>>>>>> b582005175c9326ed19509f54de1170917cb3008
 
   render() {
     let user = this.state.user;
