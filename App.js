@@ -60,7 +60,7 @@ export default class App extends React.Component {
   }
   
   backToChooseAccountType() {
-    this.setState({errMsg: "back to choose", accountType: ""})
+    this.setState({accountType: ""})
   };
 
   render() {
