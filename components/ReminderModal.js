@@ -17,7 +17,7 @@ export default class ReminderModal extends Component {
             <View >
                 <Text>Add a Reminder</Text>
                 <TextInput value={this.state.text} onChangeText={a => this.setState({text: a})}/>
-                <Button title="Add Reminder" onPress={this.props.addReminder(this.state.text)}/>
+                <Button title="Add Reminder" onPress={() => {this.props.addReminder(this.state.text)}}/>
             </View>
         );
     }
