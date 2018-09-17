@@ -2,7 +2,7 @@ import React, {Component} from 'React';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { firebase, firestore } from '../utils/firebase';
 import ReminderModal from '../components/ReminderModal';
-// import PopupDialog from 'react-native-popup-dialog';
+import PopupDialog from 'react-native-popup-dialog';
 
 
 export default class Reminders extends Component {

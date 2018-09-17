@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 const WelcomePage = (props) => {
-    console.log(1);
     return (
         <View style={styles.welcomePage}>
             <Text style={styles.logo}>Babysitter</Text>

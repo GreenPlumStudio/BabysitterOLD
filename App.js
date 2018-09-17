@@ -1,10 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Dimensions, TextInput,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity } from 'react-native';
 import { firebase, firestore } from './utils/firebase';
 import { Constants } from 'expo';
 
-import LoginPage from './containers/LoginPage';
-import SignupPage from './containers/SignupPage';
 import Messages from './containers/Messages';
 import Reminders from './containers/Reminders';
 import Routine from './containers/Routine';
@@ -78,10 +76,9 @@ export default class App extends React.Component {
 
   render() {
     let user = this.state.user;
-    console.log(this.state);
 
     return (
-      <View style={{flex:1, backgroundColor: "hotpink", marginTop: Constants.statusBarHeight}}>
+      <View style={{flex:1, backgroundColor: "lightpink", marginTop: Constants.statusBarHeight}}>
         {
           !user && this.state.accountType === "" &&
             <WelcomePage changeAccountType={this.changeAccountType} />
@@ -92,7 +89,7 @@ export default class App extends React.Component {
         }
         {
           user &&
-          <View>
+          <View style={{flex: 1}}>
     
             <View>
               <View>
@@ -138,26 +135,6 @@ export default class App extends React.Component {
 };
 
 const styles = StyleSheet.create({
-  loginSignupPage: {
-    flex: 1,
-    flexGrow: 1
-  },
-
-  backButton: {
-    position: "absolute",
-    top: 20,
-    left: 20,
-    elevation: 4,
-    zIndex: 1
-  },
-
-  backButtonText: {
-    color: "gray",
-    fontSize: 20,
-    fontWeight: "500",
-    padding: 8
-  },
-
   mainPage: {
     flex: 1
   },
