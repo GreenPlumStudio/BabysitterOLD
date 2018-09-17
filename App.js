@@ -16,10 +16,12 @@ export default class App extends React.Component {
 
     this.state = {
       user: undefined,
+      loading: true,
       accountType: "",
       loginOrSignup: "login",
       currentPage: "Reminders",
-      babysitterEmail: ""
+      babysitterEmail: "",
+      errMsg: ""
     };
 
     this.backToChooseAccountType = this.backToChooseAccountType.bind(this);
@@ -50,16 +52,15 @@ export default class App extends React.Component {
     firebase.auth().fetchProvidersForEmail(this.state.babysitterEmail)
     .then(providers => {
       if (providers.length === 0) {
-        console.log("hah u got trolled")
+        this.setState({errMsg: "No Such BabySitter Found!"});
       } else {
-        providers
-        firestore.collection("parentUsers").doc(firebase.auth().currentUser.uid/babySitters).update({
-          providers: {
-            "messages": {},
-            "reminders": {},
-            "babyInfo": {}
-          }
+        firestore.collection("parentUsers").doc(firebase.auth().currentUser.uid).collection("babySitters").doc("test").update({
+          "messages": {},
+          "reminders": {},
+          "babyInfo": {}
       });
+      this.setState({errMsg: providers});
+
       }
     });
     
@@ -169,9 +170,7 @@ export default class App extends React.Component {
         return (
           <WelcomePage changeAccountType={this.changeAccountType} />
         );
-      }
-
-      if (this.state.loginOrSignup === "login") {
+      } else if (this.state.loginOrSignup === "login") {
         return (
           <View style={styles.loginSignupPage}>
             <TouchableOpacity style={styles.backButton} onPress={this.backToChooseAccountType}>
@@ -199,7 +198,7 @@ export default class App extends React.Component {
     }
     
     return (
-      <View>
+      <View style={styles.mainPage}>
 
         <View>
           <View>
@@ -231,11 +230,12 @@ export default class App extends React.Component {
         <View style={{height: 70}}>
           <Text>this is the main page</Text>
           <Button title="Sign Out" onPress={this.signOut.bind(this)} />
-          
-          <Text>add BabySitter Email</Text>
-          <TextInput value={this.state.babysitterEmail} onChangeText={text => this.setState({babysitterEmail: text})}/>
-          <Button title="Add Babysitter" onPress={this.addBabysitter} />
         </View>
+
+        <Text>add BabySitter Email</Text>
+        <TextInput value={this.state.babysitterEmail} onChangeText={text => this.setState({babysitterEmail: text})}/>
+        <Button title="Add Babysitter" onPress={() => {this.addBabysitter()}} />
+        <Text>{this.state.errMsg}</Text>
         
       </View>
     );
@@ -273,8 +273,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "center",
-    width: Dimensions.get("window").width,
-    maxHeight: 50
+    width: Dimensions.get("window").width
   },
 
   navButton: {

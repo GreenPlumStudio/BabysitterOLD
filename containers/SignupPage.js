@@ -34,10 +34,20 @@ export default class LoginPage extends Component {
 
         firebase.auth().createUserWithEmailAndPassword(this.state.emailAddress, this.state.password)
             .then(() => {
-                firestore.collection("parentUsers").doc(firebase.auth().currentUser.uid).set({
+                let type = "";
+                let type1 = "";
+                if (this.state.accountType === "Parent") {
+                    type = "parentUsers";
+                    type1 = "babySitters";
+                } else {
+                    type = "babySitterUsers";
+                    type1 = "parents";
+                }
+                firestore.collection(type).doc(firebase.auth().currentUser.uid).set({
                     firstName: this.state.firstName,
                     lastName: this.state.lastName,
-                    username: this.state.username
+                    username: this.state.username,
+                    type1: {}
                 });
             })
             .catch(err => {
