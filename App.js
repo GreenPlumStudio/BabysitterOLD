@@ -8,6 +8,7 @@ import SignupPage from './containers/SignupPage';
 import Messages from './containers/Messages';
 import Reminders from './containers/Reminders';
 import Routine from './containers/Routine';
+import WelcomePage from './components/WelcomePage';
 
 export default class App extends React.Component {
   constructor() {
@@ -22,6 +23,7 @@ export default class App extends React.Component {
     };
 
     this.backToChooseAccountType = this.backToChooseAccountType.bind(this);
+    this.changeAccountType = this.changeAccountType.bind(this);
   };
 
   componentDidMount() {
@@ -30,6 +32,10 @@ export default class App extends React.Component {
         this.setState({user});
       }
     });
+  };
+
+  changeAccountType(accountType) {
+    this.setState({accountType});
   };
 
   signOut() {
@@ -60,31 +66,108 @@ export default class App extends React.Component {
   }
   
   backToChooseAccountType() {
-    this.setState({accountType: ""})
+    this.setState({accountType: ""});
   };
 
   render() {
     let user = this.state.user;
+    console.log(this.state);
+
+    return (
+      <View>
+        {
+          () => {
+            if (!user) {
+              if (this.state.accountType === "") {
+                console.log(1);
+                return (
+                  <WelcomePage changeAccountType={this.changeAccountType} />
+                );
+              }
+
+              if (this.state.loginOrSignup === "login") {
+                return (
+                  <View style={styles.loginSignupPage}>
+                    <TouchableOpacity style={styles.backButton} onPress={this.backToChooseAccountType}>
+                      <Text style={styles.backButtonText}>←</Text>
+                    </TouchableOpacity>
+        
+                    <LoginPage accountType={this.state.accountType} />
+                    
+                    <Button title="Don't have an account? Sign up here" onPress={() => { this.setState( {loginOrSignup: "signup"} ) }} />
+                  </View>
+                );
+              }
+
+              return (
+                <View style={styles.loginSignupPage}>
+                  <TouchableOpacity style={styles.backButton} onPress={this.backToChooseAccountType}>
+                    <Text style={styles.backButtonText}>←</Text>
+                  </TouchableOpacity>
+        
+                  <SignupPage accountType={this.state.accountType} />
+                  
+                  <Button title="Already have an account? Log in here" onPress={() => { this.setState( {loginOrSignup: "login"} ) }} />
+                </View>
+              );
+            }
+
+            return (
+              <View>
+        
+                <View>
+                  <View>
+                    <Text>MESSAGES</Text>
+                  </View>
+                  <View>
+                    <Text>REMINDERS</Text>
+                  </View>
+                  <View>
+                    <Text>ROUTINE</Text>
+                  </View>
+                </View>
+        
+                <View>
+                  {
+                    this.state.currentPage === "Messages" &&
+                      <Messages user={user} />
+                  }
+                  {
+                    this.state.currentPage === "Reminders" &&
+                      <Reminders user={user} />
+                  }
+                  {
+                    this.state.currentPage === "Routine" &&
+                      <Routine user={user} />
+                  }
+                </View>
+        
+                <View style={{height: 70}}>
+                  <Text>this is the main page</Text>
+                  <Button title="Sign Out" onPress={this.signOut.bind(this)} />
+                  
+                  <Text>add BabySitter Email</Text>
+                  <TextInput value={this.state.babysitterEmail} onChangeText={text => this.setState({babysitterEmail: text})}/>
+                  <Button title="Add Babysitter" onPress={this.addBabysitter} />
+                </View>
+                
+              </View>
+            );
+          }
+        }
+      </View>
+    );
+  };
+
+  render2() {
+    let user = this.state.user;
+    console.log(this.state);
 
     if (!user) {
       if (this.state.accountType === "") {
+        console.log(1);
         return (
-          <View style={styles.welcomePage}>
-            <Text style={styles.logo}>Babysitter</Text>
-
-            <View style={{alignItems: "center", marginTop: 50}}>
-              <Text style={{fontSize: 20, fontWeight: "300"}}>I am a...</Text>
-
-              <View style={{flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center", maxHeight: 100}}>
-                <TouchableOpacity style={{marginRight: 10, backgroundColor: "#2196F3", borderRadius: 2, elevation: 4}} onPress={() => { this.setState( {accountType: "parent"} ) }}>
-                  <Text style={{color: "white", fontSize: 15, fontWeight: "500", padding: 8}}>Parent</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{marginLeft: 10, backgroundColor: "#2196F3", borderRadius: 2, elevation: 4}} onPress={() => { this.setState( {accountType: "babysitter"} ) }}>
-                  <Text style={{color: "white", fontSize: 15, fontWeight: "500", padding: 8}}>Babysitter</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
+          <WelcomePage changeAccountType={this.changeAccountType} />
         );
       }
 
@@ -116,17 +199,17 @@ export default class App extends React.Component {
     }
     
     return (
-      <View >
+      <View>
 
-        <View >
-          <View >
+        <View>
+          <View>
             <Text>MESSAGES</Text>
           </View>
-          <View >
-            <Text >REMINDERS</Text>
+          <View>
+            <Text>REMINDERS</Text>
           </View>
-          <View >
-            <Text >ROUTINE</Text>
+          <View>
+            <Text>ROUTINE</Text>
           </View>
         </View>
 
@@ -151,7 +234,7 @@ export default class App extends React.Component {
           
           <Text>add BabySitter Email</Text>
           <TextInput value={this.state.babysitterEmail} onChangeText={text => this.setState({babysitterEmail: text})}/>
-          <Button title="Add Babysitter" onPress={this.addBabysitter()} />
+          <Button title="Add Babysitter" onPress={this.addBabysitter} />
         </View>
         
       </View>
@@ -160,22 +243,6 @@ export default class App extends React.Component {
 };
 
 const styles = StyleSheet.create({
-  welcomePage: {
-    marginTop: Constants.statusBarHeight,
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "lightblue"
-  },
-  
-  logo: {
-    marginBottom: 50,
-    fontSize: 50,
-    fontWeight: "700",
-    color: "cornflowerblue",
-    elevation: 2
-  },
-
   loginSignupPage: {
     flex: 1,
     flexGrow: 1,
