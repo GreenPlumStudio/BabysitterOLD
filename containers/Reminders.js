@@ -27,10 +27,10 @@ export default class Reminders extends Component {
             <View>
                 <Text>This be the fking reminders page ya betch lol</Text>
                 <Text>hey</Text>
-                <Button title="Add a Reminder" onPress={() => {this.popupDialog.show(() => {
- });}} />
-                  <PopupDialog
+                <Button title="Add a Reminder" onPress={() => {this.popupDialog.show();}} />
+                <PopupDialog
                     ref={(popupDialog) => { this.popupDialog = popupDialog; }}
+                    styles={{position: 'relative'}}
                 >
                     <ReminderModal addReminder={(text) => this.addReminder(text)}/>
                 </PopupDialog>
