@@ -1,7 +1,6 @@
 import React, {Component} from 'React';
 import { StyleSheet, Text, View, TextInput, Dimensions, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import { firebase } from '../utils/firebase';
-import { Constants } from 'expo';
 
 export default class LoginPage extends Component {
     constructor(props) {
@@ -39,7 +38,6 @@ export default class LoginPage extends Component {
             fontSize: this.state.formTitleSize,
             fontWeight: "500",
             color: "dodgerblue",
-            marginTop: 10,
             elevation: 2
         };
 
