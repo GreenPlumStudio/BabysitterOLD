@@ -69,7 +69,6 @@ export default class LoginPage extends Component {
             fontSize: this.state.formTitleSize,
             fontWeight: "500",
             color: "dodgerblue",
-            marginTop: 10,
             elevation: 2
         };
 

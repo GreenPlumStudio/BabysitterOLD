@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
-import { Constants } from 'expo';
+
+import LoginPage from '../containers/LoginPage';
+import SignupPage from '../containers/SignupPage';
 
 const LoginSignupPage = (props) => {
     return (
@@ -9,9 +11,16 @@ const LoginSignupPage = (props) => {
                 <Text style={styles.backButtonText}>←</Text>
             </TouchableOpacity>
 
-            <LoginPage accountType={this.state.accountType} />
+            {
+                props.loginOrSignup === "login" &&
+                    <LoginPage accountType={props.accountType} />
+            }
+            {
+                props.loginOrSignup === "signup" &&
+                    <SignupPage accountType={props.accountType} />
+            }
             
-            <Button title="Don't have an account? Sign up here" onPress={() => { this.setState( {loginOrSignup: "signup"} ) }} />
+            <Button title="Don't have an account? Sign up here" onPress={() => props.setLoginOrSignup(props.loginOrSignup === "login" ? "signup" : "login")} />
         </View>
     );
 };
@@ -19,8 +28,7 @@ const LoginSignupPage = (props) => {
 const styles = StyleSheet.create({
     loginSignupPage: {
         flex: 1,
-        flexGrow: 1,
-        marginTop: Constants.statusBarHeight
+        flexGrow: 1
     },
   
     backButton: {

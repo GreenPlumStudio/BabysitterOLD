@@ -9,6 +9,7 @@ import Messages from './containers/Messages';
 import Reminders from './containers/Reminders';
 import Routine from './containers/Routine';
 import WelcomePage from './components/WelcomePage';
+import LoginSignupPage from './components/LoginSignupPage';
 
 export default class App extends React.Component {
   constructor() {
@@ -26,6 +27,7 @@ export default class App extends React.Component {
 
     this.backToChooseAccountType = this.backToChooseAccountType.bind(this);
     this.changeAccountType = this.changeAccountType.bind(this);
+    this.setLoginOrSignup = this.setLoginOrSignup.bind(this);
   };
 
   componentDidMount() {
@@ -70,173 +72,66 @@ export default class App extends React.Component {
     this.setState({accountType: ""});
   };
 
+  setLoginOrSignup(loginOrSignup) {
+    this.setState({loginOrSignup});
+  };
+
   render() {
     let user = this.state.user;
     console.log(this.state);
 
     return (
-      <View>
+      <View style={{flex:1, backgroundColor: "hotpink", marginTop: Constants.statusBarHeight}}>
         {
-          () => {
-            if (!user) {
-              if (this.state.accountType === "") {
-                console.log(1);
-                return (
-                  <WelcomePage changeAccountType={this.changeAccountType} />
-                );
-              }
-
-              if (this.state.loginOrSignup === "login") {
-                return (
-                  <View style={styles.loginSignupPage}>
-                    <TouchableOpacity style={styles.backButton} onPress={this.backToChooseAccountType}>
-                      <Text style={styles.backButtonText}>←</Text>
-                    </TouchableOpacity>
-        
-                    <LoginPage accountType={this.state.accountType} />
-                    
-                    <Button title="Don't have an account? Sign up here" onPress={() => { this.setState( {loginOrSignup: "signup"} ) }} />
-                  </View>
-                );
-              }
-
-              return (
-                <View style={styles.loginSignupPage}>
-                  <TouchableOpacity style={styles.backButton} onPress={this.backToChooseAccountType}>
-                    <Text style={styles.backButtonText}>←</Text>
-                  </TouchableOpacity>
-        
-                  <SignupPage accountType={this.state.accountType} />
-                  
-                  <Button title="Already have an account? Log in here" onPress={() => { this.setState( {loginOrSignup: "login"} ) }} />
-                </View>
-              );
-            }
-
-            return (
-              <View>
-        
-                <View>
-                  <View>
-                    <Text>MESSAGES</Text>
-                  </View>
-                  <View>
-                    <Text>REMINDERS</Text>
-                  </View>
-                  <View>
-                    <Text>ROUTINE</Text>
-                  </View>
-                </View>
-        
-                <View>
-                  {
-                    this.state.currentPage === "Messages" &&
-                      <Messages user={user} />
-                  }
-                  {
-                    this.state.currentPage === "Reminders" &&
-                      <Reminders user={user} />
-                  }
-                  {
-                    this.state.currentPage === "Routine" &&
-                      <Routine user={user} />
-                  }
-                </View>
-        
-                <View style={{height: 70}}>
-                  <Text>this is the main page</Text>
-                  <Button title="Sign Out" onPress={this.signOut.bind(this)} />
-                  
-                  <Text>add BabySitter Email</Text>
-                  <TextInput value={this.state.babysitterEmail} onChangeText={text => this.setState({babysitterEmail: text})}/>
-                  <Button title="Add Babysitter" onPress={this.addBabysitter} />
-                </View>
-                
-              </View>
-            );
-          }
+          !user && this.state.accountType === "" &&
+            <WelcomePage changeAccountType={this.changeAccountType} />
         }
-      </View>
-    );
-  };
-
-  render2() {
-    let user = this.state.user;
-    console.log(this.state);
-
-    if (!user) {
-      if (this.state.accountType === "") {
-        console.log(1);
-        return (
-          <WelcomePage changeAccountType={this.changeAccountType} />
-        );
-      } else if (this.state.loginOrSignup === "login") {
-        return (
-          <View style={styles.loginSignupPage}>
-            <TouchableOpacity style={styles.backButton} onPress={this.backToChooseAccountType}>
-              <Text style={styles.backButtonText}>←</Text>
-            </TouchableOpacity>
-
-            <LoginPage accountType={this.state.accountType} />
-            
-            <Button title="Don't have an account? Sign up here" onPress={() => { this.setState( {loginOrSignup: "signup"} ) }} />
-          </View>
-        );
-      }
-
-      return (
-        <View style={styles.loginSignupPage}>
-          <TouchableOpacity style={styles.backButton} onPress={this.backToChooseAccountType}>
-            <Text style={styles.backButtonText}>←</Text>
-          </TouchableOpacity>
-
-          <SignupPage accountType={this.state.accountType} />
-          
-          <Button title="Already have an account? Log in here" onPress={() => { this.setState( {loginOrSignup: "login"} ) }} />
-        </View>
-      );
-    }
+        {
+          !user && this.state.accountType !== "" &&
+            <LoginSignupPage backToChooseAccountType={this.backToChooseAccountType} accountType={this.state.accountType} loginOrSignup={this.state.loginOrSignup} setLoginOrSignup={this.setLoginOrSignup} />
+        }
+        {
+          user &&
+          <View>
     
-    return (
-      <View style={styles.mainPage}>
-
-        <View>
-          <View>
-            <Text>MESSAGES</Text>
+            <View>
+              <View>
+                <Text>MESSAGES</Text>
+              </View>
+              <View>
+                <Text>REMINDERS</Text>
+              </View>
+              <View>
+                <Text>ROUTINE</Text>
+              </View>
+            </View>
+    
+            <View>
+              {
+                this.state.currentPage === "Messages" &&
+                  <Messages user={user} />
+              }
+              {
+                this.state.currentPage === "Reminders" &&
+                  <Reminders user={user} />
+              }
+              {
+                this.state.currentPage === "Routine" &&
+                  <Routine user={user} />
+              }
+            </View>
+    
+            <View style={{height: 70}}>
+              <Text>this is the main page</Text>
+              <Button title="Sign Out" onPress={this.signOut.bind(this)} />
+              
+              <Text>add BabySitter Email</Text>
+              <TextInput value={this.state.babysitterEmail} onChangeText={text => this.setState({babysitterEmail: text})}/>
+              <Button title="Add Babysitter" onPress={this.addBabysitter} />
+            </View>
+            
           </View>
-          <View>
-            <Text>REMINDERS</Text>
-          </View>
-          <View>
-            <Text>ROUTINE</Text>
-          </View>
-        </View>
-
-        <View>
-          {
-            this.state.currentPage === "Messages" &&
-              <Messages user={user} />
-          }
-          {
-            this.state.currentPage === "Reminders" &&
-              <Reminders user={user} />
-          }
-          {
-            this.state.currentPage === "Routine" &&
-              <Routine user={user} />
-          }
-        </View>
-
-        <View style={{height: 70}}>
-          <Text>this is the main page</Text>
-          <Button title="Sign Out" onPress={this.signOut.bind(this)} />
-        </View>
-
-        <Text>add BabySitter Email</Text>
-        <TextInput value={this.state.babysitterEmail} onChangeText={text => this.setState({babysitterEmail: text})}/>
-        <Button title="Add Babysitter" onPress={() => {this.addBabysitter()}} />
-        <Text>{this.state.errMsg}</Text>
-        
+        }
       </View>
     );
   };
@@ -245,8 +140,7 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   loginSignupPage: {
     flex: 1,
-    flexGrow: 1,
-    marginTop: Constants.statusBarHeight
+    flexGrow: 1
   },
 
   backButton: {
@@ -265,8 +159,7 @@ const styles = StyleSheet.create({
   },
 
   mainPage: {
-    flex: 1,
-    marginTop: Constants.statusBarHeight
+    flex: 1
   },
 
   navBar: {

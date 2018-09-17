@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { Constants } from 'expo';
 
 const WelcomePage = (props) => {
+    console.log(1);
     return (
         <View style={styles.welcomePage}>
             <Text style={styles.logo}>Babysitter</Text>
 
-            <View style={{alignItems: "center", marginTop: 50}}>
+            <View style={{alignItems: "center"}}>
                 <Text style={{fontSize: 20, fontWeight: "300"}}>I am a......</Text>
 
                 <View style={{flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center", maxHeight: 100}}>
@@ -32,7 +32,6 @@ const WelcomePage = (props) => {
 
 const styles = StyleSheet.create({
     welcomePage: {
-        marginTop: Constants.statusBarHeight,
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
