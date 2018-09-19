@@ -2,8 +2,12 @@ import React, {Component} from 'React';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { firebase, firestore } from '../utils/firebase';
 import ReminderModal from '../components/ReminderModal';
-import PopupDialog from 'react-native-popup-dialog';
+import PopupDialog, { ScaleAnimation, DialogButton, DialogTitle} from 'react-native-popup-dialog';
 
+const scaleAnimation = new ScaleAnimation({
+    toValue: 0, // optional
+    useNativeDriver: true, // optional
+  })
 
 export default class Reminders extends Component {
     constructor(props) {
@@ -24,16 +28,23 @@ export default class Reminders extends Component {
 
     render() {
         return (
-            <View>
+            <View styles={{zIndex: 1}}>
                 <Text>This be the fking reminders page ya betch lol</Text>
                 <Text>hey</Text>
-                <Button title="Add a Reminder" onPress={() => {this.popupDialog.show();}} />
+                <Button styles={{zIndex: 1}} title="Add a Reminder" onPress={() => {this.popupDialog.show();}} />
                 <PopupDialog
+                    haveOverlay={true}
+                    overlayBackgroundColor={'green'}
+                    height={0.6}
+                    dialogAnimation={scaleAnimation}
                     ref={(popupDialog) => { this.popupDialog = popupDialog; }}
-                    styles={{position: 'relative'}}
+                    dialogTitle={<DialogTitle title="Add Reminder" />}
+
                 >
-                    <ReminderModal addReminder={(text) => this.addReminder(text)}/>
-                </PopupDialog> */}
+                    <View style={{zIndex:3}}>
+                        <ReminderModal addReminder={(text) => this.addReminder(text)}/>
+                    </View>
+                </PopupDialog>
             </View>
         );
     };

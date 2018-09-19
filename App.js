@@ -122,13 +122,12 @@ export default class App extends React.Component {
               }
             </View>
     
-            <View style={{height: 70}}>
+            <View style={{height: 70, zIndex: 1}}>
               <Text>this is the main page</Text>
               <Button title="Sign Out" onPress={this.signOut.bind(this)} />
-              
-              <Text>add BabySitter Email</Text>
-              <TextInput value={this.state.babysitterEmail} onChangeText={text => this.setState({babysitterEmail: text})}/>
-              <Button title="Add Babysitter" onPress={this.addBabysitter} />
+              <Text style={{zIndex: 1}}>add BabySitter Email</Text>
+              <TextInput style={{zIndex: 1}} value={this.state.babysitterEmail} onChangeText={text => this.setState({babysitterEmail: text})}/>
+              <Button styles={{zIndex: 1}} title="Add Babysitter" onPress={this.addBabysitter} />
             </View>
             
           </View>
