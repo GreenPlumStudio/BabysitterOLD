@@ -8,6 +8,7 @@ import Reminders from './containers/Reminders';
 import Routine from './containers/Routine';
 import WelcomePage from './components/WelcomePage';
 import LoginSignupPage from './components/LoginSignupPage';
+import SideMenu from './containers/SideMenu';
 
 export default class App extends React.Component {
   constructor() {
@@ -62,6 +63,8 @@ export default class App extends React.Component {
       this.setState({errMsg: providers});
 
       }
+    }).catch(() => {
+      alert("Adding babysitter failed");
     });
     
   }
@@ -89,7 +92,8 @@ export default class App extends React.Component {
         }
         {
           user &&
-          <View style={{flex: 1}}>
+          <View>
+            {/* <SideMenu /> */}
     
             <View>
               <View>

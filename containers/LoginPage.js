@@ -20,6 +20,9 @@ export default class LoginPage extends Component {
 
     tryLogin() {
         firebase.auth().signInWithEmailAndPassword(this.state.emailAddress, this.state.password)
+            .then(() => {
+                console.log("success");
+            })
             .catch(err => {
                 this.setState({errMsg: err.message})
             });
